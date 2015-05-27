@@ -22,6 +22,25 @@
     [super viewDidLoad];
     self.stops = [NSArray new];
 
+    CLGeocoder *geocoder = [CLGeocoder new];
+    [geocoder geocodeAddressString:@"Chicago" completionHandler:^(NSArray * placemarks, NSError *error) {
+        for (CLPlacemark *place in placemarks) {
+            MKPointAnnotation *annotation = [MKPointAnnotation new];
+            annotation.coordinate = place.location.coordinate;
+        }
+    }];
+    CLLocationCoordinate2D centercoordinate = CLLocationCoordinate2DMake(41.8369, -87.6847);
+
+    MKCoordinateSpan span;
+    span.latitudeDelta = 0.4;
+    span.longitudeDelta = 0.4;
+
+    MKCoordinateRegion region;
+    region.center = centercoordinate;
+    region.span = span;
+
+    [self.mapView setRegion:region animated:YES];
+
     NSURL *url = [NSURL URLWithString:@"https://s3.amazonaws.com/mobile-makers-lib/bus.json"];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
