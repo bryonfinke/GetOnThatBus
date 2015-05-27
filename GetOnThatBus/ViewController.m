@@ -22,13 +22,6 @@
     [super viewDidLoad];
     self.stops = [NSArray new];
 
-    CLGeocoder *geocoder = [CLGeocoder new];
-    [geocoder geocodeAddressString:@"Chicago" completionHandler:^(NSArray * placemarks, NSError *error) {
-        for (CLPlacemark *place in placemarks) {
-            MKPointAnnotation *annotation = [MKPointAnnotation new];
-            annotation.coordinate = place.location.coordinate;
-        }
-    }];
     CLLocationCoordinate2D centercoordinate = CLLocationCoordinate2DMake(41.8369, -87.6847);
 
     MKCoordinateSpan span;
@@ -49,6 +42,7 @@
             MKPointAnnotation *point = [MKPointAnnotation new];
             point.coordinate = CLLocationCoordinate2DMake([[location objectForKey:@"latitude"] floatValue], [[location objectForKey:@"longitude"] floatValue]);
             point.title = [location objectForKey:@"cta_stop_name"];
+            point.subtitle = [location objectForKey:@"routes"];
             [self.mapView addAnnotation:point];
         }
     }];
